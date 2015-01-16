@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>todo</title>
+	<script type="text/javascript" src="./jquery.js"></script>
+	<script type="text/javascript" src="./todos.js"></script>
+	<style>
+		.off{
+			background: rgba(0,0,0,0.3);
+		}
+		ul{
+			  list-style: outside none none;
+		}
+		</style>
+</head>
+<body>
+	<h1>asssss</h1>
+	<a href="javascript:win.hideMainWindow()">隐藏窗口</a>
+	<a href="javascript:test()">测试弹出窗口</a>&nbsp;<a href="javascript:refresh()">刷新页面</a><br/>
+	<a href="javascript:readFile()">读取文件</a>&nbsp;<a href="javascript:wirteFile()">写入文件</a>
+	<hr>
+	<form  id="formNewTodo" action="#">
+	<input id="inputNewTodo" type="text" size=30 value="请输入新任务"/>
+	</form>
+	<ul></ul>
+</body>
+<script type="text/javascript">
+	function test(){
+		win.addAlert("aaaaaaaaaaaaaaa",10);
+	}
+	function refresh(){
+		document.location.reload();
+	}
+</script>
+</html>
