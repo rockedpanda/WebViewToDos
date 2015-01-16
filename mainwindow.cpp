@@ -20,10 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     webview->setGeometry(0,0,800,600);
 
     connect(webview->page()->mainFrame(),SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(regJavaScriptObject()));
-    //this->setGeometry(this->x(),this->y(),800,600);
     webview->load(QUrl("file:///"+QDir::currentPath()+"/index.html"));
     webview->show();
-
 
     messageTimer = new QTimer();
     this->setWindowTitle(QStringLiteral("ÈÎÎñÌáÐÑ"));
@@ -38,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(m_Pop,SIGNAL(destroyed()),this,SLOT(showLater()));
     connect(m_Pop,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(showMainWindow()));
 
-    //addAlert("monnnnnnnnnn sasdfa",60);
 }
 
 MainWindow::~MainWindow()
@@ -62,7 +59,7 @@ void MainWindow::showText(QString text, int distendSec)
         messageTimer->start(timeDistence * 1000);
         return;
     }
-    m_Pop->setToolTip(text); //"Money money go my home."
+    m_Pop->setToolTip(text);
     m_Pop->setIcon(QIcon(QDir::currentPath()+"/images/0.png"));
     m_Pop->setVisible(true);
     m_Pop->show();
@@ -136,5 +133,5 @@ void MainWindow::regJavaScriptObject()
 {
     QWebFrame *frame = webview->page()->mainFrame();
     frame->addToJavaScriptWindowObject("win",this);
-    //frame->addToJavaScriptWindowObject("console",Console::GetInstance());
+    //frame->addToJavaScriptWindowObject("Console",Console::GetInstance());
 }
