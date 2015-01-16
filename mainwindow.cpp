@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(webview->page()->mainFrame(),SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(regJavaScriptObject()));
     //this->setGeometry(this->x(),this->y(),800,600);
-    webview->load(QUrl("file:///D:/Roof/Demo/SimpleWebView/index.html"));
+    webview->load(QUrl("file:///"+QDir::currentPath()+"/index.html"));
     webview->show();
 
 
@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     messageTimer->setSingleShot(true);
     connect(messageTimer,SIGNAL(timeout()),this,SLOT(showLastText()));
     m_Pop = new QSystemTrayIcon(this);
-    m_Pop->setIcon(QIcon("D:\\chw\\learn\\JS\\0.png"));
+    m_Pop->setIcon(QIcon(QDir::currentPath()+"/images/0.png"));
     m_Pop->show();
 
     connect(m_Pop,SIGNAL(messageClicked()),this,SLOT(showMainWindow()));
@@ -63,7 +63,7 @@ void MainWindow::showText(QString text, int distendSec)
         return;
     }
     m_Pop->setToolTip(text); //"Money money go my home."
-    m_Pop->setIcon(QIcon("D:\\chw\\learn\\JS\\0.png"));
+    m_Pop->setIcon(QIcon(QDir::currentPath()+"/images/0.png"));
     m_Pop->setVisible(true);
     m_Pop->show();
 
