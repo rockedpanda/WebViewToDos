@@ -60,10 +60,14 @@ function addNew(str){
 
 /* 显示列表 */
 function showList(){
-	$("ul").html("").append(datas.sort(function(a,b){return a.off;}).map(function(x,i){
-		return x.off?('<li class="off" id="list_'+i+'">'+x.title+'</li>'):('<li id="list_'+i+'">'+x.title+'</li>');
+	$("#datasList").html("");
+	if(datas.length < 1){
+		return;
+	}
+	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).map(function(x,i){
+		return x.off?('<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>'):('<li class="list-group-item" id="list_'+i+'">'+x.title+'</li>');
 	}).join(""));
-	$('ul').click(function(evt){
+	$('#datasList').click(function(evt){
 		alert(evt.target.id);
 	});
 }
@@ -161,5 +165,8 @@ function wirteFile(){
 
 /* 读取本地数据内容,文件名固定为todos.db.txt */
 function readFile(){
-	return win.getFileContent("todos.db.txt");	
+	if('win' in window){
+		return win.getFileContent("todos.db.txt");	
+	}
+	return "[]";
 }

@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 
     webview = new QWebView(this);
-    this->setGeometry(50,50,800,600);
-    webview->setGeometry(0,0,800,600);
+    this->setGeometry(50,50,1000,600);
+    webview->setGeometry(0,0,1000,600);
 
     connect(webview->page()->mainFrame(),SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(regJavaScriptObject()));
     webview->load(QUrl("file:///"+QDir::currentPath()+"/index.html"));

@@ -1,36 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>todo</title>
-	<script type="text/javascript" src="./jquery.js"></script>
-	<script type="text/javascript" src="./todos.js"></script>
+	<link href="./css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="./js/todos.js"></script>
 	<style>
-		.off{
-			background: rgba(0,0,0,0.3);
-		}
-		ul{
-			  list-style: outside none none;
-		}
-		</style>
+	.off{
+		background: rgba(0,255,0,0.4);
+	}
+	</style>
 </head>
-<body>
-	<h1>asssss</h1>
-	<a href="javascript:win.hideMainWindow()">隐藏窗口</a>
-	<a href="javascript:test()">测试弹出窗口</a>&nbsp;<a href="javascript:refresh()">刷新页面</a><br/>
-	<a href="javascript:readFile()">读取文件</a>&nbsp;<a href="javascript:wirteFile()">写入文件</a>
-	<hr>
+<body role="document">
+	<nav role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="#" class="navbar-brand">Bootstrap theme</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="javascript:refresh();">刷新页面</a></li>
+            <li><a href="javascript:win.hideMainWindow();">隐藏窗口</a></li>
+            <li class="dropdown">
+              <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">文件 <span class="caret"></span></a>
+              <ul role="menu" class="dropdown-menu">
+                <li><a href="javascript:readFile();">读取文件</a></li>
+                <li><a href="javascript:wirteFile();">写入文件</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
+	<div class="container theme-showcase" role="main" style="margin-top: 51px;">
+	<h1>SSSAAA<attr title="hihihi hihihi hihihi ">RSS</attr></h1>
+	
 	<form  id="formNewTodo" action="#">
-	<input id="inputNewTodo" type="text" size=30 value="请输入新任务"/>
+		<fieldset>
+			<input id="inputNewTodo" type="text" size=30 value="请输入新任务"/>
+			<button type="submit" class="btn">New</button>	
+		</fieldset>
+		
 	</form>
-	<ul></ul>
+	<ul id="datasList" class="list-group">
+		
+	</ul>
+
+
+	</div>
+
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		function test(){
+			win.addAlert("aaaaaaaaaaaaaaa",10);
+		}
+		function refresh(){
+			document.location.reload();
+		}
+	</script>
 </body>
-<script type="text/javascript">
-	function test(){
-		win.addAlert("aaaaaaaaaaaaaaa",10);
-	}
-	function refresh(){
-		document.location.reload();
-	}
-</script>
 </html>
