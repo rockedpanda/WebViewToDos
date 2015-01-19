@@ -25,8 +25,10 @@ function add(){
 	else{
 		datas.push({title: text, t:0, off:true});
 	}
+	$("#inputNewTodo").val("").focus();
 	showList();
 	initAlerts();
+	wirteFile();
 }
 
 /* 格式化数字为两个字符,长的截取,短的补0 */
@@ -134,13 +136,22 @@ function initAlerts(){
 		setTimeout(function(){
 			removeId(id);
 			//notifyMe(tmp);
-			addAlert(tmp,0);
+			addAlert(getTitlesByT(tmp),0);
 			initAlerts();
 		}, nextAlertTime.getTime()-(new Date()).getTime());
 	}
 	else{
 		console.log("no alerts left");
 	}
+}
+
+/* 根据时间获取对应的任务内容 */
+function getTitlesByT(t){
+	return $.grep(datas,function(x){
+		return x.t == t;
+	}).map(function(x,i){
+		return i+": "+x.title;
+	}).join("\r\n");
 }
 
 /* 根据时间删除一个任务,将其标记为off状态 */
