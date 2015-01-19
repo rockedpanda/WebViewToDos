@@ -17,6 +17,24 @@
 		color: red;
 		margin-right: 1em;
 	}
+	#popChoice{
+		position: absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:100%;
+		background: rgba(0,0,0,0.6);
+	}
+	#popChoice {
+		display: none;
+	}
+	#popChoice ol{
+		width:330px;
+		height:206px;
+		margin: 100px auto;
+		background: #FFF;
+		list-style: none;
+	}
 	</style>
 </head>
 <body role="document">
@@ -72,6 +90,15 @@
 
 	</div>
 
+	<div id="popChoice">
+		<ol class="list-group">
+		<li class="list-group-item"><strong>请选择要执行的操作</strong></li>
+		<li id="choice_ok" class="list-group-item">已完成</li>
+		<li id="choice_5min" class="list-group-item">延迟5分钟</li>
+		<li id="choice_15min" class="list-group-item">延迟15分钟</li>
+		<li id="choice_tomorrow" class="list-group-item">延迟到明天上午</li>
+		</ol>
+	</div>
 	<script src="js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		function test(){

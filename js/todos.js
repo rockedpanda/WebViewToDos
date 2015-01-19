@@ -1,4 +1,16 @@
 $(document).ready(function(){
+	$("#choice_ok").click(function(evt){
+		setOK();
+	});
+	$("#choice_5min").click(function(evt){
+		set5min();
+	});
+	$("#choice_15min").click(function(evt){
+		set15min();
+	});
+	$("#choice_tomorrow").click(function(evt){
+		setTomorrow();
+	});
 	datas = JSON.parse(readFile());
 	showList();
 	initAlerts();
@@ -7,8 +19,36 @@ $(document).ready(function(){
 		return false;
 	});
 	$("#inputNewTodo").focus();
+
 });
 
+var lastData ={};
+/* 用户操作的绑定 */
+function setOK(){
+	lastData.off = true;
+	$("#popChoice").hide();
+	showList();
+	initAlerts();
+}
+function set5min(){
+	lastData.off = false;
+	lastData.t = lastData.t + "5min";
+	$("#popChoice").hide();
+	showList();
+	initAlerts();
+}
+function set15min(){
+	lastData.off = true;
+	$("#popChoice").hide();
+	showList();
+	initAlerts();
+}
+function setTomorrow(){
+	lastData.off = true;
+	$("#popChoice").hide();
+	showList();
+	initAlerts();
+}
 /* 页面的数据存储
  * 数据格式: [{'id':1,'title':'AAAAAAAAAAAAAAAA','t':'1501161057', off:true}]
  */
@@ -67,13 +107,18 @@ function showList(){
 		return;
 	}
 	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).reverse().map(function(x,i){
-		var offStr = '<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
+		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
 		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
 		return x.off ? offStr: onStr;
 	}).join(""));
 	$('#datasList').click(function(evt){
-		alert(evt.target.id);
+		dealTarget(evt.target.id);
 	});
+}
+
+/* */
+function dealTarget(domId){
+	$("#popChoice").show();
 }
 
 /* 向任务队列增加提醒 */
@@ -177,7 +222,9 @@ function getShownTimeByT(t){
 ////本地文件方式存储
 /* 更新本地数据文件,文件名固定为todos.db.txt */
 function wirteFile(){
-	win.setFileContent("todos.db.txt", JSON.stringify(datas));
+	if('win' in window){
+		win.setFileContent("todos.db.txt", JSON.stringify(datas));
+	}
 }
 
 /* 读取本地数据内容,文件名固定为todos.db.txt */
