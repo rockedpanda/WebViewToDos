@@ -65,7 +65,9 @@ function showList(){
 		return;
 	}
 	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).reverse().map(function(x,i){
-		return x.off?('<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>'):('<li class="list-group-item" id="list_'+i+'">'+x.title+'</li>');
+		var offStr = '<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
+		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
+		return x.off ? offStr: onStr;
 	}).join(""));
 	$('#datasList').click(function(evt){
 		alert(evt.target.id);
@@ -153,7 +155,11 @@ function removeId(t){
 	}
 }
 
-
+/* 格式化输出一个时间 */
+function getShownTimeByT(t){
+	t = "" +t;
+	return t.substr(-4,2)+":"+t.substr(-2);
+}
 
 ////更新数据的获取和存储格式为mongodb,单独建立一个本地服务用于数据的查询和返回,采用http方式交互
 
@@ -170,3 +176,4 @@ function readFile(){
 	}
 	return "[]";
 }
+
