@@ -64,7 +64,7 @@ function showList(){
 	if(datas.length < 1){
 		return;
 	}
-	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).map(function(x,i){
+	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).reverse().map(function(x,i){
 		return x.off?('<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>'):('<li class="list-group-item" id="list_'+i+'">'+x.title+'</li>');
 	}).join(""));
 	$('#datasList').click(function(evt){

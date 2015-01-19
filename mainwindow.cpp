@@ -3,6 +3,7 @@
 #include <QWebFrame>
 #include <QFile>
 #include <QDir>
+#include <QGridLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,9 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     /** 插件和flash播放相关 */
     QWebSettings::globalSettings()->setAttribute(QWebSettings::JavascriptEnabled, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
+    //layout = new QGridLayout(this);
+    //this->setLayout(layout);
 
     webview = new QWebView(this);
-    this->setGeometry(50,50,1000,600);
+    //layout->addWidget(webview,0,0);
+
     webview->setGeometry(0,0,1000,600);
 
     connect(webview->page()->mainFrame(),SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(regJavaScriptObject()));

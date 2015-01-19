@@ -7,11 +7,13 @@
 #include <QUrl>
 #include <QSystemTrayIcon>
 #include <QTimer>
+#include <QGridLayout>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
+    QGridLayout *layout;
     QWebView *webview;
     QSystemTrayIcon *m_Pop;
 public:
