@@ -1,4 +1,10 @@
 $(document).ready(function(){
+	$('#datasList').click(function(evt){
+		//console.log('deal target for click event.');
+		console.log(evt.target.id + "  "+ evt.target.innerText);
+		dealTarget(evt.target.id);
+	});
+
 	$("#choice_ok").click(function(evt){
 		setOK();
 	});
@@ -63,7 +69,7 @@ function add(){
 		addNew(text);
 	}
 	else{
-		datas.push({title: text, t:0, off:false});
+		datas.push({title: text, t:'0', off:false});
 	}
 	$("#inputNewTodo").val("").focus();
 	showList();
@@ -106,14 +112,17 @@ function showList(){
 	if(datas.length < 1){
 		return;
 	}
-	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).reverse().map(function(x,i){
+	$("#datasList").append(datas.sort(function(a,b){
+		return (a.t > b.t|| (a.t == b.t && a.title>b.title))?-1:1;// ;
+	}).map(function(x,i){
 		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
 		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
 		return x.off===true ? offStr: onStr;
 	}).join(""));
-	$('#datasList').click(function(evt){
-		dealTarget(evt.target.id);
-	});
+
+	//$('#datasList').click(function(evt){
+	//	alert(evt.target.id);
+	//});
 }
 
 /* */
@@ -154,26 +163,33 @@ function notifyMe(title) {
 /* 处理所有数据并更新下一个提醒的时间 */
 function initAlerts(){
 	var first = $.grep(datas,function(x){
-		return x.off !== true;
+		return x.off !== true && x.t !== '0';
 	}).map(function(x){
 		return x.t;
 	}).sort();
+	console.log(first);
 	if(first.length > 0){
 		var tmp = first[0];
 		var id= tmp;
 
 		console.log(tmp);
-		var nextAlertTime = new Date();
-		nextAlertTime.setFullYear(
-			parseInt('20'+tmp.substring(0,2),10),
-			parseInt(tmp.substring(2,4),10)-1,
-			parseInt(tmp.substring(4,6),10)
-			);	
-		nextAlertTime.setHours(parseInt(tmp.substring(6,8),10));	//设置 Date 对象中的小时 (0 ~ 23)。
-		nextAlertTime.setMinutes(parseInt(tmp.substring(8,10),10));	//设置 Date 对象中的分钟 (0 ~ 59)。
-		nextAlertTime.setSeconds(0);
-		console.log('下一个提醒:    '+(nextAlertTime.getTime()-(new Date()).getTime()));
-		if((nextAlertTime.getTime()-(new Date()).getTime()) < 10){
+
+		var nextAlertTime = new Date();  //dateTime.str2Time('20'+tmp);
+		var nextMillinSeconds = 0;  //300s, 5min. 暂时不做提醒
+		if(tmp !== '0'){
+			nextAlertTime.setFullYear(
+				parseInt('20'+tmp.substring(0,2),10),
+				parseInt(tmp.substring(2,4),10)-1,
+				parseInt(tmp.substring(4,6),10)
+				);	
+			nextAlertTime.setHours(parseInt(tmp.substring(6,8),10));	//设置 Date 对象中的小时 (0 ~ 23)。
+			nextAlertTime.setMinutes(parseInt(tmp.substring(8,10),10));	//设置 Date 对象中的分钟 (0 ~ 59)。
+			nextAlertTime.setSeconds(0);	
+			nextMillinSeconds = nextAlertTime.getTime()-(new Date()).getTime();
+		}
+		
+		console.log('下一个提醒:    '+ nextMillinSeconds/1000);
+		if(nextMillinSeconds < 10000){   //小于10秒
 			removeId(id);
 			initAlerts();
 			return;
@@ -183,7 +199,7 @@ function initAlerts(){
 			//notifyMe(tmp);
 			addAlert(getTitlesByT(tmp),0);
 			initAlerts();
-		}, nextAlertTime.getTime()-(new Date()).getTime());
+		}, nextMillinSeconds);
 	}
 	else{
 		console.log("no alerts left");
@@ -203,7 +219,7 @@ function getTitlesByT(t){
 function removeId(t){
 	var length = datas.length;
 	for(var i=0;i<length;i++){
-		if(datas[i].t == t){
+		if(datas[i].t == t && t != "0"){
 			datas[i].off = true;
 			//datas.splice(i,1);
 			return;
@@ -226,7 +242,7 @@ function getShownTimeByT(t){
 /* 更新本地数据文件,文件名固定为todos.db.txt */
 function wirteFile(){
 	if('win' in window){
-		win.setFileContent("todos.db.txt", JSON.stringify(datas));
+		win.setFileContent("todos.db.txt", JSON.stringify(datas,null,2));
 	}
 }
 
