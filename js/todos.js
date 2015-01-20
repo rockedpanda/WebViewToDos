@@ -63,7 +63,7 @@ function add(){
 		addNew(text);
 	}
 	else{
-		datas.push({title: text, t:0, off:true});
+		datas.push({title: text, t:0, off:false});
 	}
 	$("#inputNewTodo").val("").focus();
 	showList();
@@ -109,7 +109,7 @@ function showList(){
 	$("#datasList").append(datas.sort(function(a,b){return a.off==true;}).reverse().map(function(x,i){
 		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
 		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
-		return x.off ? offStr: onStr;
+		return x.off===true ? offStr: onStr;
 	}).join(""));
 	$('#datasList').click(function(evt){
 		dealTarget(evt.target.id);
@@ -154,7 +154,7 @@ function notifyMe(title) {
 /* 处理所有数据并更新下一个提醒的时间 */
 function initAlerts(){
 	var first = $.grep(datas,function(x){
-		return !x.off;
+		return x.off !== true;
 	}).map(function(x){
 		return x.t;
 	}).sort();
@@ -172,7 +172,7 @@ function initAlerts(){
 		nextAlertTime.setHours(parseInt(tmp.substring(6,8),10));	//设置 Date 对象中的小时 (0 ~ 23)。
 		nextAlertTime.setMinutes(parseInt(tmp.substring(8,10),10));	//设置 Date 对象中的分钟 (0 ~ 59)。
 		nextAlertTime.setSeconds(0);
-		console.log('ssssssssss    '+(nextAlertTime.getTime()-(new Date()).getTime()));
+		console.log('下一个提醒:    '+(nextAlertTime.getTime()-(new Date()).getTime()));
 		if((nextAlertTime.getTime()-(new Date()).getTime()) < 10){
 			removeId(id);
 			initAlerts();
@@ -214,6 +214,9 @@ function removeId(t){
 /* 格式化输出一个时间 */
 function getShownTimeByT(t){
 	t = "" +t;
+	if(t == "0"){
+		return '持续   ';
+	}
 	return t.substr(-4,2)+":"+t.substr(-2);
 }
 

@@ -17,6 +17,9 @@
 		color: red;
 		margin-right: 1em;
 	}
+	#formNewTodo{
+		margin-bottom: 10px;
+	}
 	#popChoice{
 		position: absolute;
 		top:0;
@@ -78,10 +81,16 @@
 	
 	<form  id="formNewTodo" action="#">
 		<fieldset>
-			<input id="inputNewTodo" type="text" size=30 value="请输入新任务"/>
-			<button type="submit" class="btn">New</button>	
+			<div class="row">
+				<div class="col-xs-6">
+					<input id="inputNewTodo"  class="form-control" type="text" size=30 value="" placeholder="请输入新任务"/>
+				</div>
+				<div class="col-xs-2">
+					<button type="submit" class="btn btn-primary">New</button>	
+				</div>
+			</div>
+
 		</fieldset>
-		
 	</form>
 	<ul id="datasList" class="list-group">
 		

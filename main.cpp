@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
     QRect screenRect = QApplication::desktop()->screenGeometry();
 
     MainWindow w;
+    w.setWindowFlags(w.windowFlags() & ~Qt::WindowMaximizeButtonHint );
     int width = screenRect.width() > 1000 ? 1000:screenRect.width();
     w.setGeometry(screenRect.width()/2 -width/2,(screenRect.height() > 600? (screenRect.height()/2-300):0),width,600);
 
