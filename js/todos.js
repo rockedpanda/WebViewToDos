@@ -112,14 +112,19 @@ function showList(){
 	if(datas.length < 1){
 		return;
 	}
+	var iconNumber = 0;
 	$("#datasList").append(datas.sort(function(a,b){
 		return (a.t > b.t|| (a.t == b.t && a.title>b.title))?-1:1;// ;
 	}).map(function(x,i){
 		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
 		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
+		if(x.off !== true && x.t != '0'){  // && x.t != '0'
+			iconNumber++;
+		}
 		return x.off===true ? offStr: onStr;
 	}).join(""));
 
+	win.setIconNumber(Math.min(iconNumber,6));
 	//$('#datasList').click(function(evt){
 	//	alert(evt.target.id);
 	//});

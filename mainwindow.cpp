@@ -132,6 +132,15 @@ void MainWindow::setFileContent(QString fileName, QString fileContent)
     }
 }
 
+void MainWindow::setIconNumber(int number)
+{
+    QString iconFilePath = "0.png";
+    if(number < 10 && number > -1){
+        iconFilePath = QString::number(number) + ".png";
+    }
+    m_Pop->setIcon(QIcon(QDir::currentPath()+"/images/"+iconFilePath));
+}
+
 
 void MainWindow::regJavaScriptObject()
 {

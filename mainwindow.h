@@ -31,6 +31,8 @@ public slots:
     void addAlert(QString title, int distendSeconds);
     QString getFileContent(QString fileName);
     void setFileContent(QString fileName,QString fileContent);
+
+    void setIconNumber(int number);
 private:
     QTimer *messageTimer;
     QString m_lastText;
