@@ -1,8 +1,9 @@
 $(document).ready(function(){
 	$('#datasList').click(function(evt){
 		//console.log('deal target for click event.');
-		console.log(evt.target.id + "  "+ evt.target.innerText);
-		dealTarget(evt.target.id);
+		var dataId = $(evt.target).attr("dataid");
+		console.log(dataId + "  "+ evt.target.innerText);
+		dealTarget(dataId);
 	});
 
 	$("#choice_ok").click(function(evt){
@@ -18,6 +19,7 @@ $(document).ready(function(){
 		setTomorrow();
 	});
 	datas = JSON.parse(readFile());
+	initDatas();
 	showList();
 	initAlerts();
 	$("#formNewTodo").submit(function(){
@@ -38,19 +40,21 @@ function setOK(){
 }
 function set5min(){
 	lastData.off = false;
-	lastData.t = lastData.t + "5min";
+	lastData.t = dateTime.getDealy5min(lastData.t, 300);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function set15min(){
-	lastData.off = true;
+	lastData.off = false;
+	lastData.t = dateTime.getDealy5min(lastData.t, 900);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function setTomorrow(){
-	lastData.off = true;
+	lastData.off = false;
+	lastData.t = dateTime.getDealy5min(lastData.t, 3600*20);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
@@ -59,6 +63,27 @@ function setTomorrow(){
  * 数据格式: [{'id':1,'title':'AAAAAAAAAAAAAAAA','t':'1501161057', off:true}]
  */
 var datas = [];
+var datasInfo = {
+	size: 0,
+	maxId: 0,
+	creatId:function(){
+		return this.maxId +1;
+	},
+	getIndexById:function(dataId){
+		for(var i=0;i<datas.length;i++){
+			if(datas[i].id == dataId){
+				return i;
+			}
+		}
+		return -1;
+	}
+};
+
+/* */
+function initDatas(){
+	datasInfo.size = datas.length;
+	datasInfo.maxId = Math.max(datas.map(function(x){return x.id})) || 1;
+}
 
 /* 页面上增加一条新记录的方法
  * 可以是通常字符串,也可以是带有 内容@1530 格式的字符串,@为分隔符,1530表示在当天15:30分弹出提醒
@@ -69,7 +94,7 @@ function add(){
 		addNew(text);
 	}
 	else{
-		datas.push({title: text, t:'0', off:false});
+		datas.push({title: text, t:'0', off:false, id:datasInfo.creatId()});
 	}
 	$("#inputNewTodo").val("").focus();
 	showList();
@@ -94,6 +119,7 @@ function addNew(str){
 		return;
 	}
 	t.title = d[0];
+	t.id = datasInfo.creatId();
 	if(d.length > 1){
 		var timeToAlert = d[1];
 		if(timeToAlert.length == 4){
@@ -116,8 +142,8 @@ function showList(){
 	$("#datasList").append(datas.sort(function(a,b){
 		return (a.t > b.t|| (a.t == b.t && a.title>b.title))?-1:1;// ;
 	}).map(function(x,i){
-		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
-		var onStr  = '<li class="list-group-item" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
+		var offStr = '';//'<li class="off list-group-item" dataid="'+i+'">'+x.title+'</li>';
+		var onStr  = '<li class="list-group-item" dataid="'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
 		if(x.off !== true && x.t != '0'){  // && x.t != '0'
 			iconNumber++;
 		}
@@ -130,8 +156,28 @@ function showList(){
 	//});
 }
 
+/* 显示所有任务 */
+function showAll(){
+$("#datasList").html("");
+	if(datas.length < 1){
+		return;
+	}
+	$("#datasList").append(datas.sort(function(a,b){
+		return (a.off < b.off || a.t > b.t|| (a.t == b.t && a.title>b.title))?-1:1;// ;
+	}).map(function(x,i){
+		var offStr = '';//'<li class="off list-group-item" id="list_'+i+'">'+x.title+'</li>';
+		var onStr  = '<li class="list-group-item'+(x.off?" off":"")+'" id="list_'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
+		return onStr;
+	}).join(""));	
+}
 /* */
-function dealTarget(domId){
+function dealTarget(dataId){
+	var index = datasInfo.getIndexById(dataId);
+	if(index == -1){
+		console.log("error index for "+index);
+		return;
+	}
+	lastData = datas[index];
 	$("#popChoice").show();
 }
 
@@ -167,15 +213,21 @@ function notifyMe(title) {
 
 /* 处理所有数据并更新下一个提醒的时间 */
 function initAlerts(){
-	var first = $.grep(datas,function(x){
+	var filtedData = $.grep(datas,function(x){
 		return x.off !== true && x.t !== '0';
-	}).map(function(x){
-		return x.t;
-	}).sort();
+	}).sort(function(a,b){
+		return a.t > b.t ? 1: -1;
+	});
+	if(filtedData.length == 0){
+		console.log("no alert left.");
+		return;
+	}
+	var first = filtedData[0].t;
+	var id= filtedData[0].id;
 	console.log(first);
 	if(first.length > 0){
-		var tmp = first[0];
-		var id= tmp;
+		var tmp = first;
+		
 
 		console.log(tmp);
 
@@ -195,12 +247,12 @@ function initAlerts(){
 		
 		console.log('下一个提醒:    '+ nextMillinSeconds/1000);
 		if(nextMillinSeconds < 10000){   //小于10秒
-			removeId(id);
+			dealyById(id);
 			initAlerts();
 			return;
 		}
 		setTimeout(function(){
-			removeId(id);
+			dealyById(id);
 			//notifyMe(tmp);
 			addAlert(getTitlesByT(tmp),0);
 			initAlerts();
@@ -226,6 +278,30 @@ function removeId(t){
 	for(var i=0;i<length;i++){
 		if(datas[i].t == t && t != "0"){
 			datas[i].off = true;
+			//datas.splice(i,1);
+			return;
+		}
+	}
+}
+/* 根据时间删除一个任务,将其标记为off状态 */
+function removeById(id){
+	var length = datas.length;
+	for(var i=0;i<length;i++){
+		if(datas[i].id == id){
+			datas[i].off = true;
+			//datas.splice(i,1);
+			return;
+		}
+	}
+}
+
+/* 延迟一个任务 */
+function dealyById(id){
+	var length = datas.length;
+	for(var i=0;i<length;i++){
+		if(datas[i].id == id){
+			datas[i].off = false;
+			datas[i].t = dateTime.getDealy5min();
 			//datas.splice(i,1);
 			return;
 		}

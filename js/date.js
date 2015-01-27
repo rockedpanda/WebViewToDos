@@ -58,6 +58,19 @@ var dateTime = {
 			return str.substr(-2);
 		}
 		return "00".substr(0,2-str.length) + str;
+	},
+	getDealy5min:function(t,distence){
+		distence = distence || 300;
+		var curTime;
+		if(t){
+			curTime = this.str2time('20'+t).getTime();
+		}
+		else{
+			curTime = (new Date()).getTime();			
+		}
+		var nextTime = new Date();
+		nextTime.setTime(curTime + distence * 1000);
+		return this.time2str(nextTime,"yyMMddHHmm");
 	}
 };
 
@@ -81,3 +94,4 @@ console.log(dateTime.fixStr('01:01') == '201501200101');
 console.log(dateTime.fixStr('0101') == '201501200101');
 */
 
+//console.log(dateTime.getDealy5min());
