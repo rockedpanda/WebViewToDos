@@ -33,6 +33,8 @@ $(document).ready(function(){
 var lastData ={};
 /* 用户操作的绑定 */
 function setOK(){
+	console.log(JSON.stringify(lastData));
+	//return;
 	lastData.off = true;
 	$("#popChoice").hide();
 	showList();
@@ -67,7 +69,8 @@ var datasInfo = {
 	size: 0,
 	maxId: 0,
 	creatId:function(){
-		return this.maxId +1;
+		this.maxId = this.maxId +1;
+		return this.maxId;
 	},
 	getIndexById:function(dataId){
 		for(var i=0;i<datas.length;i++){
@@ -82,7 +85,7 @@ var datasInfo = {
 /* */
 function initDatas(){
 	datasInfo.size = datas.length;
-	datasInfo.maxId = Math.max(datas.map(function(x){return x.id})) || 1;
+	datasInfo.maxId = Math.max.apply(null,datas.map(function(x){return x.id})) || 1;
 }
 
 /* 页面上增加一条新记录的方法
@@ -143,7 +146,7 @@ function showList(){
 		return (a.t > b.t|| (a.t == b.t && a.title>b.title))?-1:1;// ;
 	}).map(function(x,i){
 		var offStr = '';//'<li class="off list-group-item" dataid="'+i+'">'+x.title+'</li>';
-		var onStr  = '<li class="list-group-item" dataid="'+i+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
+		var onStr  = '<li class="list-group-item" dataid="'+x.id+'"><span class="time">'+getShownTimeByT(x.t)+'</span>'+x.title+'</li>';
 		if(x.off !== true && x.t != '0'){  // && x.t != '0'
 			iconNumber++;
 		}
