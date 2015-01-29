@@ -234,7 +234,7 @@ function initAlerts(){
 
 		console.log(tmp);
 
-		var nextAlertTime = new Date();  //dateTime.str2Time('20'+tmp);
+		var nextAlertTime = new Date();  //dateTime.str2time('20'+tmp);
 		var nextMillinSeconds = 0;  //300s, 5min. 暂时不做提醒
 		if(tmp !== '0'){
 			nextAlertTime.setFullYear(
@@ -317,7 +317,32 @@ function getShownTimeByT(t){
 	if(t == "0"){
 		return '持续   ';
 	}
-	return t.substr(-4,2)+":"+t.substr(-2);
+	var todayTime = dateTime.time2str(new Date(), "yyMMdd");
+	if(t.substr(0,6) == todayTime){
+		return t.substr(-4,2)+":"+t.substr(-2);
+	}
+	var curTime = new Date();
+	var tTime = dateTime.str2time('20'+t);
+	var distenceDays = Math.floor((tTime.getTime()+8*3600*1000) / (3600*1000*24)) - Math.floor((curTime.getTime()+8*3600*1000) /(3600*1000*24));
+
+	if(distenceDays < 0){
+		return '超期';
+	}
+	else if(distenceDays == 0){
+		return '今天';
+	}
+	else if(distenceDays == 1){
+		return '明天';
+	}
+	else if(distenceDays == 2){
+		return '后天';
+	}
+	else if(distenceDays < 7){
+		return '近期';
+	}
+	else{
+		return '后续';
+	}
 }
 
 ////更新数据的获取和存储格式为mongodb,单独建立一个本地服务用于数据的查询和返回,采用http方式交互
