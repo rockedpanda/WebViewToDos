@@ -15,13 +15,16 @@ MainWindow::MainWindow(QWidget *parent)
     /** 插件和flash播放相关 */
     QWebSettings::globalSettings()->setAttribute(QWebSettings::JavascriptEnabled, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
-    //layout = new QGridLayout(this);
-    //this->setLayout(layout);
+    centralW = new QWidget(this);
+    this->setCentralWidget(centralW);
+    layout = new QGridLayout(centralW);
+    centralW->setLayout(layout);
+    layout->setMargin(0);
 
     webview = new QWebView(this);
-    //layout->addWidget(webview,0,0);
+    layout->addWidget(webview,0,0);
 
-    webview->setGeometry(0,0,1000,600);
+    //webview->setGeometry(0,0,1000,600);
 
     connect(webview->page()->mainFrame(),SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(regJavaScriptObject()));
     webview->load(QUrl("file:///"+QDir::currentPath()+"/index.html"));

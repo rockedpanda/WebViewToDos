@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     QGridLayout *layout;
+    QWidget *centralW;
     QWebView *webview;
     QSystemTrayIcon *m_Pop;
 public:
