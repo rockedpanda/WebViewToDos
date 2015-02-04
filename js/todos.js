@@ -43,41 +43,41 @@ $(document).ready(function(){
 var lastData ={};
 /* 用户操作的绑定 */
 function setOK(){
-	console.log(JSON.stringify(lastData));
+	console.log(JSON.stringify(datas[lastData.index]));
 	//return;
-	lastData.off = true;
+	datas[lastData.index].off = true;
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function set5min(){
-	lastData.off = false;
-	lastData.t = dateTime.getDealy5min(lastData.t, 300);
+	datas[lastData.index].off = false;
+	datas[lastData.index].t = dateTime.getDealy5min(datas[lastData.index].t, 300);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function set15min(){
-	lastData.off = false;
-	lastData.t = dateTime.getDealy5min(lastData.t, 900);
+	datas[lastData.index].off = false;
+	datas[lastData.index].t = dateTime.getDealy5min(datas[lastData.index].t, 900);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function setTomorrow(){
-	lastData.off = false;
-	lastData.t = dateTime.getDealy5min(lastData.t, 3600*20);
+	datas[lastData.index].off = false;
+	datas[lastData.index].t = dateTime.getDealy5min(datas[lastData.index].t, 3600*20);
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
 }
 function setAnotherTime(){
 	$("#popChoice").hide();
-	var name=prompt("请输入新时间","")
+	var name=prompt("请输入新时间(格式:15s, 45min, 2hour, next week等)","")
 	if (name!=null && name!="")
 	{
-		lastData.t = dateTime.getNextTimeFromStr(lastData.t, name);
-		console.log(JSON.stringify(lastData));
+		datas[lastData.index].t = dateTime.getNextTimeFromStr(datas[lastData.index].t, name);
+		console.log(JSON.stringify(datas[lastData.index]));
 		showList();
 		initAlerts();
 	}
@@ -205,7 +205,8 @@ function dealTarget(dataId){
 		console.log("error index for "+index);
 		return;
 	}
-	lastData = datas[index];
+	//lastData = datas[index];
+	lastData.index = index;
 	$("#popChoice").show();
 }
 
