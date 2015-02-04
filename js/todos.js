@@ -18,6 +18,13 @@ $(document).ready(function(){
 	$("#choice_tomorrow").click(function(evt){
 		setTomorrow();
 	});
+	$("#choice_time").click(function(evt){
+		setAnotherTime();
+	});
+	
+	$("#choice_cancel").click(function(evt){
+		setCancel();
+	});
 	datas = JSON.parse(readFile());
 	initDatas();
 	showList();
@@ -28,6 +35,9 @@ $(document).ready(function(){
 	});
 	$("#inputNewTodo").focus();
 
+	setTimeout(function(){
+		autoRunItems.run();
+	}, 1000);
 });
 
 var lastData ={};
@@ -60,6 +70,21 @@ function setTomorrow(){
 	$("#popChoice").hide();
 	showList();
 	initAlerts();
+}
+function setAnotherTime(){
+	$("#popChoice").hide();
+	var name=prompt("请输入新时间","")
+	if (name!=null && name!="")
+	{
+		lastData.t = dateTime.getNextTimeFromStr(lastData.t, name);
+		console.log(JSON.stringify(lastData));
+		showList();
+		initAlerts();
+	}
+}
+function setCancel(){
+	console.log("canceled operation");
+	$("#popChoice").hide();
 }
 /* 页面的数据存储
  * 数据格式: [{'id':1,'title':'AAAAAAAAAAAAAAAA','t':'1501161057', off:true}]
@@ -363,3 +388,28 @@ function readFile(){
 	return "[]";
 }
 
+
+/* 增加一个自动处理中心 */
+var autoRunItems ={
+	inited:false,
+	items:[],
+	add:function(f, name){
+		this.items.push({'func':f,'name':name});
+	},
+	run:function(){
+		if(this.inited == false){
+			this.init();
+		}
+		this.items.forEach(function(x){
+			x.func();
+		});
+	},
+	init:function(){
+		//初始化过程中将系统全局autorunlist列表中的各个任务追加到当前任务列表中
+		//用户也可能在之前已经调用了add接口直接增加. 
+		//使用时判定有无autoRunItems对象, 有的话直接调用add,没有则追加到autorunlist中去,解耦并规避加载顺序问题
+		this.items = this.items.concat(window.autorunlist || []);
+		//this.add(checkJenkis);
+		this.inited=true;
+	}
+};

@@ -70,7 +70,27 @@ var dateTime = {
 		}
 		var nextTime = new Date();
 		nextTime.setTime(curTime + distence * 1000);
+		//console.log("--" + this.time2str(nextTime,"yyMMddHHmm"));
 		return this.time2str(nextTime,"yyMMddHHmm");
+	},
+	getNextTimeFromStr:function(t,distence){
+		if(typeof distence == 'number'){
+			return this.getDealy5min(t, distence);
+		}
+		distence = ""+distence;
+		if(distence.match(/\d+s(ec)?$/)){
+			return this.getDealy5min(t, parseInt(distence,10));
+		}
+		else if(distence.match(/\d+m(in)?$/)){
+			return this.getDealy5min(t, parseInt(distence,10)*60);	
+		}
+		else if(distence.match(/\d+h(our(s)?)?$/)){
+			return this.getDealy5min(t, parseInt(distence,10)*3600);	
+		}
+		else if(distence.match(/next day/)){
+			return this.getDealy5min(t, 3600*24);
+		}
+		return this.getDealy5min(t, 300);
 	}
 };
 
@@ -92,6 +112,17 @@ console.log(dateTime.fixStr('2015/10/10 01:01:00') == '201510100101');
 console.log(dateTime.fixStr('2015/10/10 01:01:00,000') == '201510100101');
 console.log(dateTime.fixStr('01:01') == '201501200101');
 console.log(dateTime.fixStr('0101') == '201501200101');
-*/
+
 
 //console.log(dateTime.getDealy5min());
+
+console.log(dateTime.getNextTimeFromStr('1501200101',60) == '1501200102');
+console.log(dateTime.getNextTimeFromStr('1501200101',120) == '1501200103');
+console.log(dateTime.getNextTimeFromStr('1501200101','60s') == '1501200102');
+console.log(dateTime.getNextTimeFromStr('1501200101','120s') == '1501200103');
+console.log(dateTime.getNextTimeFromStr('1501200101','10m') == '1501200111');
+console.log(dateTime.getNextTimeFromStr('1501200101','10min') == '1501200111');
+console.log(dateTime.getNextTimeFromStr('1501200101','1h') == '1501200201');
+console.log(dateTime.getNextTimeFromStr('1501200101','next day') == '1501210101');
+
+*/

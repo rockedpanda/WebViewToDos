@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="./js/date.js"></script>
 	<script type="text/javascript" src="./js/todos.js"></script>
+	<script type="text/javascript" src="./js/autorunlist.js"></script>
 	<style>
 	.off{
 		background: rgba(0,255,0,0.4);
@@ -70,6 +71,7 @@
                 <li><a href="#">One more separated link</a></li>
               </ul>
             </li>
+            <li><a id="autoRunInfos" href="http://192.168.2.34:8080/jenkins/">自动任务</a></li>
             <li><a href="javascript:win.hideMainWindow();">隐藏窗口</a></li>
 
           </ul>
@@ -109,6 +111,8 @@
 		<li id="choice_5min" class="list-group-item">延迟5分钟</li>
 		<li id="choice_15min" class="list-group-item">延迟15分钟</li>
 		<li id="choice_tomorrow" class="list-group-item">延迟到明天上午</li>
+		<li id="choice_time" class="list-group-item">选择时间</li>
+		<li id="choice_cancel" class="list-group-item">取消</li>
 		</ol>
 	</div>
 	<script src="js/bootstrap.min.js"></script>
